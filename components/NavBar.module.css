@@ -1,0 +1,11 @@
+#ida {
+    background-color: blue;
+}
+
+.link {
+    text-decoration: none;
+}
+
+.active {
+    color: tomato
+}

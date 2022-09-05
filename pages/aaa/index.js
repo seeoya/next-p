@@ -1,3 +1,5 @@
 export default function aaa() {
-    return "abcd";
+    return <div>
+        aaaa
+    </div>;
 }

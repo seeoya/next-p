@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import Seo from "../components/Seo";
 
-export default function Home() {
-    const [movies, setMovies] = useState([]);
+export default function Home({ results }) {
+    const [movies, setMovies] = useState();
 
     useEffect(() => {
         (async () => {
@@ -15,7 +15,8 @@ export default function Home() {
         <div className="container">
             <Seo title="Home" />
             {!movies && <h4>Loading...</h4>}
-            {movies?.map((movie) => (
+            {/* {results?.map((movie) => ( */}
+            {results?.map((movie) => (
                 <div key={movie.id} className="movie">
                     <img src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} alt={movie.original_title} />
                     <h4>{movie.original_title}</h4>
@@ -46,3 +47,14 @@ export default function Home() {
         </div>
     );
 }
+
+// export async function getServerSideProps() {
+//     // run on the server
+//     const API_KEY = process.env.API_KEY;
+//     const { results } = await (await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`)).json();
+//     return {
+//         props: {
+//             results
+//         }
+//     };
+// }

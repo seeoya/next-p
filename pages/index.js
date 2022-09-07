@@ -1,25 +1,35 @@
-import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import Seo from "../components/Seo";
 
 export default function Home({ results }) {
-    const [movies, setMovies] = useState();
+    // const [movies, setMovies] = useState();
 
-    useEffect(() => {
-        (async () => {
-            const { results } = await (await fetch(`/api/movies`)).json();
-            setMovies(results);
-        })();
-    }, []);
+    // useEffect(() => {
+    //     (async () => {
+    //         const { results } = await (await fetch(`/api/movies`)).json();
+    //         setMovies(results);
+    //     })();
+    // }, []);
+
+    const router = useRouter();
+    const onClick = (id) => {
+        router.push(`/movies/${id}`);
+    };
 
     return (
         <div className="container">
             <Seo title="Home" />
-            {!movies && <h4>Loading...</h4>}
-            {/* {results?.map((movie) => ( */}
+            {/* {!movies && <h4>Loading...</h4>} */}
+            {/* {movies?.map((movie) => ( */}
             {results?.map((movie) => (
-                <div key={movie.id} className="movie">
-                    <img src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} alt={movie.original_title} />
-                    <h4>{movie.original_title}</h4>
+                <div className="movie" onClick={() => onClick(movie.id)}>
+                    <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.original_title} />
+                    <h4>
+                        <Link href={`/movies/${movie.id}`} key={movie.id}>
+                            <a>{movie.original_title}</a>
+                        </Link>
+                    </h4>
                 </div>
             ))}
 
@@ -29,6 +39,9 @@ export default function Home({ results }) {
                     grid-template-columns: 1fr 1fr;
                     padding: 20px;
                     gap: 20px;
+                }
+                .movie {
+                    cursor: pointer;
                 }
                 .movie img {
                     width: 100%;
@@ -48,13 +61,13 @@ export default function Home({ results }) {
     );
 }
 
-// export async function getServerSideProps() {
-//     // run on the server
-//     const API_KEY = process.env.API_KEY;
-//     const { results } = await (await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`)).json();
-//     return {
-//         props: {
-//             results
-//         }
-//     };
-// }
+export async function getServerSideProps() {
+    // run on the server
+    const API_KEY = process.env.API_KEY;
+    const { results } = await (await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`)).json();
+    return {
+        props: {
+            results
+        }
+    };
+}

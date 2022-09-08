@@ -13,8 +13,20 @@ export default function Home({ results }) {
     // }, []);
 
     const router = useRouter();
-    const onClick = (id) => {
-        router.push(`/movies/${id}`);
+
+    const onClick = (id, title) => {
+        router.push(
+            {
+                pathname: `/movies/${id}`,
+                query: {
+                    id,
+                    title
+                }
+
+                // as로 url 마스킹
+            },
+            `/movies/${id}`
+        );
     };
 
     return (
@@ -23,10 +35,21 @@ export default function Home({ results }) {
             {/* {!movies && <h4>Loading...</h4>} */}
             {/* {movies?.map((movie) => ( */}
             {results?.map((movie) => (
-                <div className="movie" onClick={() => onClick(movie.id)}>
+                <div className="movie" onClick={() => onClick(movie.id, movie.title)}>
                     <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.original_title} />
                     <h4>
-                        <Link href={`/movies/${movie.id}`} key={movie.id}>
+                        <Link
+                            href={
+                                ({
+                                    pathname: `/movies/${movie.id}`,
+                                    query: {
+                                        title: movie.original_title
+                                    }
+                                },
+                                `/movies/${movie.original_title}`)
+                            }
+                            key={movie.id}
+                        >
                             <a>{movie.original_title}</a>
                         </Link>
                     </h4>
